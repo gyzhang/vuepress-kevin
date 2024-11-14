@@ -151,7 +151,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     blogger: {
       avatar: 'https://jsd.cdn.zzko.cn/gh/xugaoyi/image_store/blog/20200103123203.jpg',
       name: 'Kevin Zhang',
-      slogan: '喜欢凑热闹的高龄程序猿/攻城狮',
+      slogan: '爱凑热闹的高龄程序猿/攻城狮',
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.xugaoyi.com/pages/a20ce8/#social)
@@ -202,6 +202,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         content: '前端,后端,微服务,中台,云原生,架构,设计,开发,需求,个人技术博客,技术文档,学习,面试,Java,SpringBoot,SpringCloud,TypeScript,vue,css3,html5,Node,git,github,markdown',
       },
     ],
+    ['meta', { name: 'baidu-site-verification', content: 'codeva-DWMMPmPpIo' }], // 百度统计的站长验证（你可以去掉）
     ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
   ],
 
