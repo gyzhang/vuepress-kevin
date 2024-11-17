@@ -64,14 +64,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '评论栏', link: '/pages/ce175c/' },
         ]
       },
-      { text: '资源', link: '/pages/db78e2/' },
-      { text: '案例', link: '/pages/5d571c/' },
-      { text: '问答', link: '/pages/9cc27d/' },
       {
         text: '芋道', link: '/pages/604be0/', items: [
           { text: '快速开始', link: '/pages/604be0/' },
-          { text: '代码集成', link: '/pages/15cb1b/' },
-          { text: '框架初探', link: '/pages/abf949/' },
+          { text: '代码集成_TODO', link: '/pages/15cb1b/' },
+          { text: '框架初探_TODO', link: '/pages/abf949/' },
         ]
       },
     ],
