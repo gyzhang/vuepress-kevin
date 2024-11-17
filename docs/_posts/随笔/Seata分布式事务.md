@@ -38,7 +38,7 @@ author:
 
 创建数据库和表：
 
-```mysql
+```sql
 CREATE database account;
 CREATE TABLE `account`.`repayment` (  
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -53,7 +53,7 @@ CREATE TABLE `account`.`repayment` (
 
 创建数据库和表：
 
-```mysql
+```sql
 CREATE database loan;
 CREATE TABLE `loan`.`iou` (  
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -68,7 +68,7 @@ INSERT INTO iou (id, user_id, balance) VALUES (1, '1001', 100000);
 
 创建数据库和表：
 
-```mysql
+```sql
 CREATE database credit;
 CREATE TABLE `credit`.`line` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -315,7 +315,7 @@ store {
 3. 创建 seata 数据库，创建 seata 需要的 3 张表，脚本位置 C:\Java\seata-1.4.0\script\server\db：
 
 ```sql
--- -------------------------------- The script used when storeMode is 'db' --------------------------------
+-- The script used when storeMode is 'db'
 -- the table to store GlobalSession data
 CREATE TABLE IF NOT EXISTS `global_table`
 (
@@ -383,7 +383,7 @@ sh ${SEATAPATH}/script/config-center/consul/consul-config.sh -h localhost -p 850
 
 5. 在对应的贷后、核算和授信数据库中执行如下建表语句，该脚本存放在 C:\Java\seata-1.4.0\script\client\at\db 目录下：
 
-```mysql
+```sql
 -- for AT mode you must to init this sql for you business database. the seata server not need it.
 CREATE TABLE IF NOT EXISTS `undo_log`
 (
