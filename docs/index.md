@@ -3,7 +3,7 @@ home: true
 heroImage: /img/logo.png
 heroText: 杂货铺@光哥.知识
 tagline: 🚀怀揣十万篇，遨游天地间
-actionText: 一个猛子，你扎入了知识的海洋 →
+actionText: 积跬步，至千里 →
 actionLink: /pages/a2f161/
 bannerBg: none # auto => 网格纹背景(有bodyBgImg时无背景)，默认 | none => 无 | '大图地址' | background: 自定义背景样式       提示：如发现文本颜色不适应你的背景时可以到palette.styl修改$bannerTextColor变量
 
