@@ -1,3 +1,16 @@
+---
+title: Seata分布式事务
+date: 2024-11-17 16:48:40
+permalink: /pages/23de7b/
+sidebar: auto
+categories:
+  - 随笔
+tags:
+  - 
+author: 
+  name: Kevin Zhang
+  link: https://github.com/gyzhang
+---
 ## Seata 分布式事务
 
 本文的示例业务场景选择了分布式微服务（信贷中台）下的“**还款业务**”，并做了最大程度的简化，涉及 3 个能力中心，完成一次还款，涉及 3 个数据库中的 3 张表，这些数据变动就形成了一个典型的分布式事务：
