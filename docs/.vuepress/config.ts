@@ -74,25 +74,6 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '框架初探', link: '/pages/abf949/' },
         ]
       },
-      {
-        text: '工作', link: '/pages/f9f9ba/', items: [
-          { text: '部署测试系统', link: '/pages/f9f9ba/' },
-          { text: '安装虚拟机软件', link: '/pages/440bf0/' },
-          { text: '安装Linux服务器', link: '/pages/ac61bc/' },
-          { text: '安装基础支持环境', link: '/pages/ffdace/' },
-          { text: '安装技术微服务', link: '/pages/8234d0/' },
-          { text: '安装业务微服务', link: '/pages/4ce132/' },
-          { text: '安装风控微服务', link: '/pages/d3f0a4/' },
-          { text: '安装信贷前端', link: '/pages/7aa1fc/' },
-          { text: '后记', link: '/pages/711276/' },
-          {
-            text: '相关文章', items: [
-              { text: 'POC准备工作', link: '/pages/63dbad/' },
-              { text: '现场工作笔记', link: '/pages/7a7ec8/' },
-            ]
-          }
-        ]
-      },
     ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
     logo: '/img/logo.png', // 导航栏logo
