@@ -128,7 +128,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
 
     // 博主信息 (显示在首页侧边栏)
     blogger: {
-      avatar: 'https://jsd.cdn.zzko.cn/gh/xugaoyi/image_store/blog/20200103123203.jpg',
+      avatar: '/img/avatar.jpg',
       name: 'Kevin Zhang',
       slogan: '爱凑热闹的高龄程序猿',
     },
