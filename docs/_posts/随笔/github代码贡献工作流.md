@@ -6,7 +6,7 @@ sidebar: auto
 categories:
   - 随笔
 tags:
-  - 
+  - github
 author: 
   name: Kevin Zhang
   link: https://github.com/gyzhang
@@ -41,27 +41,27 @@ author:
 
 在本地修改分支上修改测试通过后，提交代码并推送到 github，在 github 的这两个位置上都可以开启 Pull Request：
 
-![image-20231003165717321](images/image-20231003165717321.png)
+![image-20231003165717321](./images/image-20231003165717321.png)
 
 我使用上面的第①的 Pull requests 来完成后续的 PR，选择自己 fork 过来的仓库中的修改分支，例如（fix_by_kevin_20231003）和原始仓库进行对比，然后创建 Pull Request：
 
-![image-20231003165941901](images/image-20231003165941901.png)
+![image-20231003165941901](./images/image-20231003165941901.png)
 
 为 Pull Request 填写标题和说明，然后单击 Create pull request 按钮创建 PR：
 
-![image-20231003170504291](images/image-20231003170504291.png)
+![image-20231003170504291](./images/image-20231003170504291.png)
 
 等待原仓库作者（valarchie）合并 pull request：
 
-![image-20231003170624379](images/image-20231003170624379.png)
+![image-20231003170624379](./images/image-20231003170624379.png)
 
 等待原作者合并后，在 github 上收到消息中有紫色的 Merged 标记说明已经合并：
 
-![image-20231003225522768](images/image-20231003225522768.png)
+![image-20231003225522768](./images/image-20231003225522768.png)
 
 在原仓库作者合并 PR 后，可在 github 上删除对应的修改分支：
 
-![image-20231007105142768](images/image-20231007105142768.png)
+![image-20231007105142768](./images/image-20231007105142768.png)
 
 本地仓库切换回 main 分支获取原仓库的更新（`git pull upstream main`）后，可安全删除修改分支：
 
@@ -123,7 +123,7 @@ Deleted remote-tracking branch origin/fix_by_kevin_20231003 (was 135a135).
 
 查看本地仓库中的 git 日志，可以清晰的看到原仓库作者（valarchie）合并修改 bug 后的 pull request：
 
-![image-20231003231635842](images/image-20231003231635842.png)
+![image-20231003231635842](./images/image-20231003231635842.png)
 
 
 

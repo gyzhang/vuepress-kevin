@@ -6,7 +6,8 @@ sidebar: auto
 categories:
   - 随笔
 tags:
-  - 
+  - 分布式
+  - 事务
 author: 
   name: Kevin Zhang
   link: https://github.com/gyzhang
@@ -262,7 +263,7 @@ public class IouController {
 3. 创建`com.example.credit.mapper`包，存放 MyBatis Mapper 接口文件；
 4. 使用 MybatisCodeHelper 插件生成对应的 MyBatis 文件。
 
-![image-20210310150855693](images/image-20210310150855693.png)
+![image-20210310150855693](./images/image-20210310150855693.png)
 
 5. 修改 Mapper，提供查询和更新语句。
 
@@ -502,7 +503,7 @@ public interface AccountClient {
 
 依次启动 consul、seata 服务器后，启动核算、授信和贷后服务。
 
-![image-20210310214408407](images/image-20210310214408407.png)
+![image-20210310214408407](./images/image-20210310214408407.png)
 
 正常启动后可以看到全局事务客户端初始化，及资源管理器
 
@@ -552,7 +553,7 @@ java.net.ConnectException: Connection refused: connect
 
 由于LocalDateTime的反序列化问题（可能是 seata 的 bug 或者是 MySQL 驱动问题，date 类型数据序列化进undo_log表后无法反序列化），导致一直重试回滚，查看数据库中的重做日志 undo_log 表记录，注意其中的 xid 字段值：
 
-![image-20210310235636931](images/image-20210310235636931.png)
+![image-20210310235636931](./images/image-20210310235636931.png)
 
 出于技术测试目的，调整还款调用逻辑（LoanService 类）为贷后-授信-核算（当然，这不符合真实业务逻辑），以便测试观察事务正常回滚：
 
@@ -594,7 +595,7 @@ java.net.ConnectException: Connection refused: connect
 
 既然 `Seata` 是两段提交，那我们看看它在每个阶段都做了点啥？下边我们还以下单扣库存、扣余额举例。
 
-![image-20210311144807709](images/image-20210311144807709.png)
+![image-20210311144807709](./images/image-20210311144807709.png)
 
  `Seata` 分布式事务中的几种角色：
 
