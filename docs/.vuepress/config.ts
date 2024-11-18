@@ -71,7 +71,13 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '框架初探_TODO', link: '/pages/abf949/' },
         ]
       },
-      { text: '杂记', link: '/pages/ag6998/' },
+      {
+        text: '杂记', link: '/pages/ag6998/', items: [
+          { text: '在GitHub上贡献代码', link: '/pages/ag6998/' },
+          { text: '使用K8s部署系统', link: '/pages/c72385/' },
+          { text: 'Seata分布式事务', link: '/pages/23de7b/' },
+        ]
+      },
     ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
     logo: '/img/logo.png', // 导航栏logo
