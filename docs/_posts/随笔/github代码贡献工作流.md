@@ -13,31 +13,49 @@ author:
 ---
 # 如何在Github上贡献代码
 
-1、在github上fork原始项目：https://github.com/valarchie/AgileBoot-Back-End
-2、在本地clone自己fork后的项目：git clone git@github.com:gyzhang/AgileBoot-Back-End.git
-3、在本地项目仓库中添加原始项目为upstream：git remote add upstream git@github.com:valarchie/AgileBoot-Back-End.git
-4、检查本地项目仓库的upstream：git remote -v
-5、在本地仓库中更新原始项目仓库的代码：git pull upstream main
-6、在本地仓库中创建修改分支：git branch fix_by_kevin_20231003
-7、在本地仓库中切换到修改分支：git checkout fix_by_kevin_20231003
-8、修改bug并进行充分的测试验证
-9、添加修改的文件到暂存区（stage）：git add xxx.xxx
-10、查看当前修改状态，确认修改的文件是否在暂存区：git status
-11、提交（可选git commit --edit）暂存区中的修改内容：git commit -m "fix: 修改“岗位管理”-删除-按钮功能错误：前端传递参数和后端不匹配，参照操作日志的删除功能做了修改。"
-12、将本地提交（修改分支中的）推送到远端仓库，如果不清楚请使用git remote -v命令，在github上一般我们自己的fork的仓库就是origin：git push origin fix_by_kevin_20231003
+1、在github上fork原始项目：https://github.com/valarchie/AgileBoot-Back-End；
+
+2、在本地clone自己fork后的项目：git clone git@github.com:gyzhang/AgileBoot-Back-End.git；
+
+3、在本地项目仓库中添加原始项目为upstream：git remote add upstream git@github.com:valarchie/AgileBoot-Back-End.git；
+
+4、检查本地项目仓库的upstream：git remote -v；
+
+5、在本地仓库中更新原始项目仓库的代码：git pull upstream main；
+
+6、在本地仓库中创建修改分支：git branch fix_by_kevin_20231003；
+
+7、在本地仓库中切换到修改分支：git checkout fix_by_kevin_20231003；
+
+8、修改bug并进行充分的测试验证；
+
+9、添加修改的文件到暂存区（stage）：git add xxx.xxx；
+
+10、查看当前修改状态，确认修改的文件是否在暂存区：git status；
+
+11、提交（可选git commit --edit）暂存区中的修改内容：git commit -m "fix: 修改“岗位管理”-删除-按钮功能错误：前端传递参数和后端不匹配，参照操作日志的删除功能做了修改。"；
+
+12、将本地提交（修改分支中的）推送到远端仓库，如果不清楚请使用git remote -v命令，在github上一般我们自己的fork的仓库就是origin：git push origin fix_by_kevin_20231003；
+
 13、登录到自己的 github 账户，进入已fork的项目页面；
+
 14、点击上部 "Pull Requests"（拉取请求）选项卡；
+
 15、在右侧的 "New pull request"（新建拉取请求）按钮上点击；
+
 16、在 "Comparing changes"（比较变更）页面中，选择 "base" 和 "head" 的正确选项。通常，你需要将 "base" 设置为你所贡献的项目（https://github.com/valarchie/AgileBoot-Back-End）的分支（github为 "main"），将 "head" 设置为你自己的修改分支（fix_by_kevin_20231002）；
+
 17、添加一个标题来描述你的 PR，说明你所做的修改的内容；
+
 18、在 PR 的描述中，详细说明你所做的修改的目的和内容，以便维护者或其他贡献者可以更好地理解你的工作；
-19、点击 "Create pull request"（创建拉取请求）按钮来创建 PR。
-20、等待原始仓库合并你的代码到main中（后续你git pull upstream main就更新了你贡献的代码），然后就删除你的这次开发分支
-21、开始新一次的代码贡献：请从第5步开始拉取原始仓库的最新代码，然后创建本地修改分支>>修改>>测试>>提交>>推送到github>>创建PR
 
-以上，因为墙的原因，在大多数情况下需要“科学上网”。
+19、点击 "Create pull request"（创建拉取请求）按钮来创建 PR；
 
+20、等待原始仓库合并你的代码到main中（后续你git pull upstream main就更新了你贡献的代码），然后就删除你的这次开发分支；
 
+21、开始新一次的代码贡献：请从第5步开始拉取原始仓库的最新代码，然后创建本地修改分支>>修改>>测试>>提交>>推送到github>>创建PR；
+
+以上，因为墙的原因，在大多数情况下需要“科学上网”，偶尔github也能连接上，看运气。
 
 在本地修改分支上修改测试通过后，提交代码并推送到 github，在 github 的这两个位置上都可以开启 Pull Request：
 
