@@ -30,8 +30,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     nav: [
       { text: '首页', link: '/' },
       { text: '后端', link: '/pages/7aaa7c/' },
-      {
-        text: '指南', link: '/pages/a2f161/', items: [
+      { text: '指南', link: '/pages/a2f161/', items: [
           { text: '主题初衷与诞生', link: '/pages/52d5c3/' },
           { text: '介绍', link: '/pages/a2f161/' },
           { text: '快速上手', link: '/pages/793dcb/' },
@@ -40,8 +39,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '自动生成front matter', link: '/pages/088c16/' },
           { text: 'Markdown 容器', link: '/pages/d0d7eb/' },
           { text: 'Markdown 中使用组件', link: '/pages/197691/' },
-          {
-            text: '相关文章', items: [
+          { text: '相关文章', items: [
               { text: '使目录栏支持h2~h6标题', link: '/pages/8dfab5/' },
               { text: '如何让你的笔记更有表现力', link: '/pages/dd027d/' },
               { text: '批量操作front matter工具', link: '/pages/2b8e22/' },
