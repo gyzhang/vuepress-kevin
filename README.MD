@@ -113,9 +113,13 @@ Copyright (c) 2019-present Evan Xu
 
 ## 我的构建脚本
 
-通过cron任务拉取gitee仓库，然后构建并将生成文件指定到nginx发布目录，达到自动构建的低级效果：
+1. 通过cron任务执行构建脚本；
+2. 在npm build中将生成文件（dist）指定到nginx发布目录；
+3. 拉取gitee仓库；
+4. 如果仓库有更新（我有写新的文章提交）执行构建脚本；
+5. 如果仓库没有更新，则跳过构建过程。
 
-构建脚本（build.sh），我请通义千问（第一遍不出意外是错误的，指正对话后修改正确）：
+构建脚本（build.sh），我请“[通义千问](https://tongyi.aliyun.com/)”（第一遍不出意外是错误的，指正对话后修改正确）写的：
 
 ```bash
 #!/bin/bash
@@ -151,7 +155,7 @@ fi
 cd
 ```
 
-cron表达式，我请文心一言帮我写的：
+cron表达式，我请“[文心一言](https://yiyan.baidu.com/)”写的：
 
 ```bash
 crontab -e
