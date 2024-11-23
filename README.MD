@@ -110,3 +110,52 @@ npm run dev # or yarn dev
 [MIT](https://github.com/xugaoyi/vuepress-theme-vdoing/blob/master/LICENSE)
 
 Copyright (c) 2019-present Evan Xu
+
+## 我的构建脚本
+
+通过cron任务拉取gitee仓库，然后构建并将生成文件指定到nginx发布目录，达到自动构建的低级效果：
+
+构建脚本（build.sh），我请通义千问（第一遍不出意外是错误的，指正对话后修改正确）：
+
+```bash
+#!/bin/bash
+
+# 定义工作目录
+WORK_DIR="/opt/vuepress-kevin/"
+
+# 进入工作目录
+cd "$WORK_DIR" || exit 1 # 如果目录不存在或无法进入，则退出脚本
+
+# 检出所有更改以确保本地更改不会影响拉取操作
+git checkout -- .
+
+# 获取当前分支的最新提交哈希值
+OLD_COMMIT=$(git rev-parse HEAD)
+
+# 尝试拉取最新的代码
+echo "Pulling latest changes from the repository..."
+git pull origin master # 假设主分支名为'master'
+
+# 获取拉取后的最新提交哈希值
+NEW_COMMIT=$(git rev-parse HEAD)
+
+# 比较两个提交哈希值，判断是否有更新
+if [ "$OLD_COMMIT" = "$NEW_COMMIT" ]; then
+    echo "No new changes detected in the repository. Skipping build."
+else
+    echo "Repository has been updated. Starting build process..."
+    npm run build
+fi
+
+# 返回到用户目录
+cd
+```
+
+cron表达式，我请文心一言帮我写的：
+
+```bash
+crontab -e
+# 每3小时执行1次构建脚本：拉取gitee仓库，构建到nginx发布目录
+0 */3 * * * /bin/bash /root/build.sh
+```
+
