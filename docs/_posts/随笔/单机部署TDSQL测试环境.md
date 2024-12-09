@@ -12,7 +12,7 @@ author:
   name: Kevin Zhang
   link: https://github.com/gyzhang
 ---
-# 单机部署 TDSQL 测试验证环境
+# 单机部署 TDSQL 测试环境
 
 安装 `KylinV10SP2 x86_64` 虚拟机（IP 地址：192.168.137.101）用以安装 TDSQL 测试验证环境，按照常规：
 
@@ -23,11 +23,11 @@ author:
 
 > 本文以 `/root/tdsql_10.3.17.3.0/` 为 TDSQL 的安装目录。
 
-# 1 安装 TDSQL
+## 1 安装 TDSQL
 
 安装 TDSQL 的过程中，会从互联网上下载大量的依赖包（rpm），请保持你的虚拟机能够正常访问互联网。
 
-## 1.1 修改主机地址
+### 1.1 修改主机地址
 
 ```bash
 # 将该文件中所有的服务器配置缩小到 1 台机器上，并删除多余的机器配置
@@ -92,7 +92,7 @@ tdsql_ansible_test1 ansible_ssh_host=192.168.137.101
 =======================================================
 ```
 
-## 1.2 免密登录设置
+### 1.2 免密登录设置
 
 编辑 `tdsql_install/scripts/ip_passwd_list` 文件，只留 1 行：
 
@@ -109,9 +109,9 @@ vi tdsql_install/scripts/ip_passwd_list
 sh tdsql_install/scripts/nokey.sh
 ```
 
-![image-20241209145911082](images/image-20241209145911082.png)
+![image-20241209145911082](./images/image-20241209145911082.png)
 
-## 1.3 修改 group_vars/all
+### 1.3 修改 group_vars/all
 
 修改文件中的内容，主要是网卡名称和数据库密码，KylinV10SP2 只有 1 个网卡的情况下，网卡名称通常是 `enp0s3`，可通过 `ifconfig` 命令查看。
 
@@ -162,7 +162,7 @@ update_tdsqlinstall_packet: mysqlagent
 
 如果，文件中有多个机器（实例）的配置，请删除，只留 1 台机器的配置。
 
-## 1.4 安装 ansible
+### 1.4 安装 ansible
 
 在虚拟机能访问互联网的情况下，安装 ansible：
 
@@ -170,15 +170,15 @@ update_tdsqlinstall_packet: mysqlagent
 sh tdsql_install/scripts/install_ansible.sh
 ```
 
-![image-20241209150140310](images/image-20241209150140310.png)
+![image-20241209150140310](./images/image-20241209150140310.png)
 
 安装过程中，会下载大量的内容，并且要在本机编译，网络畅通的情况下，花费时间大概 15 分钟。
 
 安装完成后，执行 ansible --version 命令，查看版本信息：
 
-![image-20241209150525902](images/image-20241209150525902.png)
+![image-20241209150525902](./images/image-20241209150525902.png)
 
-## 1.5 取消内存限制
+### 1.5 取消内存限制
 
 修改 TDSQL 安装配置文件，取消 5G 内存限制：
 
@@ -187,11 +187,11 @@ vi tdsql_install/roles/tdsql_env_check/files/checkenv/docheck.sh
 # 查找 5000000 然后删除第 39~43 行
 ```
 
-![image-20241209151235805](images/image-20241209151235805.png)
+![image-20241209151235805](./images/image-20241209151235805.png)
 
 > 当然，你也可以去掉 32~36 行，以支持在 1 个 CPU 核上的安装。
 
-## 1.6 安装数据库
+### 1.6 安装数据库
 
 执行如下命令，使用之前的配置，安装 TDSQL 数据库：
 
@@ -200,27 +200,27 @@ cd tdsql_install/
 ansible-playbook -i tdsql_hosts playbooks/tdsql_part1_site.yml
 ```
 
-![image-20241209150645674](images/image-20241209150645674.png)
+![image-20241209150645674](./images/image-20241209150645674.png)
 
 安装过程大约 10 分钟，然后检查安装结果，必须保证其中所有的 `failed=0` 才说明是成功的。
 
-![image-20241209155340746](images/image-20241209155340746.png)
+![image-20241209155340746](./images/image-20241209155340746.png)
 
 > 其中的 tdsql_oss1 行的 skipped=1 是正常且正确的输出。
 
-# 2 配置数据库
+## 2 配置数据库
 
 通过浏览器访问“TDSQL-赤兔管理台” [http://192.168.137.101/tdsqlpcloud/](http://192.168.137.101/tdsqlpcloud/)，完成数据库的安装配置：
 
-![image-20241209124237278](images/image-20241209124237278.png)
+![image-20241209124237278](./images/image-20241209124237278.png)
 
 添加 OSS 服务列表信息，并测试服务连接：
 
-![image-20241209124455249](images/image-20241209124455249.png)
+![image-20241209124455249](./images/image-20241209124455249.png)
 
 初始化实例：
 
-![image-20241209125837264](images/image-20241209125837264.png)
+![image-20241209125837264](./images/image-20241209125837264.png)
 
 最后的“软件授权管理”可以使用“跳过此步骤”，不影响 TDSQL 集群正常使用或运行。
 
@@ -229,15 +229,15 @@ ansible-playbook -i tdsql_hosts playbooks/tdsql_part1_site.yml
 
 完成后，使用 [http://192.168.137.101/tdsqlpcloud/](http://192.168.137.101/tdsqlpcloud/) 登录“赤兔管理台”，用户名 `admin`，密码：`123456`（默认密码）。
 
-![image-20241209131634300](images/image-20241209131634300.png)
+![image-20241209131634300](./images/image-20241209131634300.png)
 
 > 登录成功会强制修改赤兔网站密码来满足密码复杂度要求，按提示设置完成即可。（部分版本）若没有提示，请至【系统管理】手动修改管理员密码至更高强度。
 
-# 3 客户端连接
+## 3 客户端连接
 
 使用 Navicat 连接到 TDSQL，完成后续测试验证工作。
 
-![image-20241209153815655](images/image-20241209153815655.png)
+![image-20241209153815655](./images/image-20241209153815655.png)
 
 创建的数据库实例连接信息：
 
@@ -254,11 +254,11 @@ select count(*) from system_menu;
 source 
 ```
 
-# 4 服务器启停
+## 4 服务器启停
 
 TDSQL 在服务器（虚拟机）重启后会自动启动，官方文档[组件启停操作说明](https://cloud.tencent.com/privatecloud/document/66088861826052096)提供了一些运维操作指导。
 
-## 4.1 启停数据库
+### 4.1 启停数据库
 
 数据库服务的启停命令如下：
 
@@ -273,7 +273,7 @@ cd /data/tdsql_run/4001/percona-5.7.17/install
 ./restartmysql_cgroup.sh 4001
 ```
 
-## 4.2 启停赤兔平台
+### 4.2 启停赤兔平台
 
 赤兔平台是用 php 开发的，启停命令如下：
 
