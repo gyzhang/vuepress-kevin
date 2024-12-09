@@ -251,7 +251,7 @@ ansible-playbook -i tdsql_hosts playbooks/tdsql_part1_site.yml
 mysql -h192.168.137.101 -P15001 -utdsqlpcloud -p123456 -c
 use ruoyi-vue-pro;
 select count(*) from system_menu;
-source 
+source ./test.sql;
 ```
 
 ## 4 服务器启停
