@@ -218,13 +218,53 @@ ansible-playbook -i tdsql_hosts playbooks/tdsql_part1_site.yml
 
 ![image-20241209124455249](./images/image-20241209124455249.png)
 
-初始化实例：
+集群初始化，添加“机型”，后续用来创建数据库实例：
 
-![image-20241209125837264](./images/image-20241209125837264.png)
+![image-20241210095744127](./images/image-20241210095744127.png)
 
-最后的“软件授权管理”可以使用“跳过此步骤”，不影响 TDSQL 集群正常使用或运行。
+上报网关资源：
 
-> 虽然本版本并未限制授权缺失、失效、过期的情况下正常使用TDSQL集群，但如果您未上传授权文件，您可能无法获得软件补丁或其他服务。在软件开发、测试过程中，为了临时验证数据库脚本的兼容行，可不提供授权文件。
+![image-20241210095836645](./images/image-20241210095836645.png)
+
+上报DB设备资源：
+
+![image-20241210095939040](./images/image-20241210095939040.png)
+
+新增网关组：
+
+![image-20241210100414082](./images/image-20241210100414082.png)
+
+> 当前只在 1 台机器上安装，所以是“从 1 个 IDC 中，取 1 台机器”。
+
+初始化非分布式实例：
+
+![image-20241210100635345](./images/image-20241210100635345.png)
+
+容灾设置：
+
+![image-20241210101046045](./images/image-20241210101046045.png)
+
+开始创建：
+
+![image-20241210101243232](./images/image-20241210101243232.png)
+
+实例创建完成后，选择“初始化”：
+
+![image-20241210101853841](./images/image-20241210101853841.png)
+
+> 注意按照实际情况选择字符编码和表面大小写是否敏感，如：utf8mb4。
+
+为系统配置数据库：
+
+![image-20241210102131176](./images/image-20241210102131176.png)
+
+> 密码为前面配置文件中设置的“123456”。
+
+最后的“软件授权管理”可以使用“跳过此步骤”，不影响 TDSQL 集群正常使用或运行：
+
+![image-20241210102247238](./images/image-20241210102247238.png)
+
+> 虽然本版本并未限制授权缺失、失效、过期的情况下正常使用TDSQL集群，但如果您未上传授权文件，您可能无法获得软件补丁或其他服务。
 >
 
 完成后，使用 [http://192.168.137.101/tdsqlpcloud/](http://192.168.137.101/tdsqlpcloud/) 登录“赤兔管理台”，用户名 `admin`，密码：`123456`（默认密码）。
@@ -251,12 +291,29 @@ ansible-playbook -i tdsql_hosts playbooks/tdsql_part1_site.yml
 mysql -h192.168.137.101 -P15001 -utdsqlpcloud -p123456 -c
 use ruoyi-vue-pro;
 select count(*) from system_menu;
-source ./test.sql;
 ```
+
+使用 MySQL 导入导出数据，做数据迁移：
+
+```bash
+# 直接bash中导入数据
+mysql -ugcb9_dev -pRisk@2024 < ./ddl/gcb9_account_dev.sql
+mysql -ugcb9_dev -pRisk@2024 < ./data/gcb9_account_dev.sql
+# 在MySQL命令行
+source ./ddl/gcb9_account_dev.sql;
+source ./data/gcb9_account_dev.sql;
+# 导出数据
+mysqldump -ugcb9_dev -pRisk@2024 --no-data --databases gcb9_account_dev > ./ddl/gcb9_account_dev.sql
+mysqldump -ugcb9_dev -pRisk@2024 --no-create-info --databases gcb9_account_dev > ./data/gcb9_account_dev.sql
+```
+
+> TDSQL 实例在使用 MySQL 5.7 时，默认字符集是“utf8mb4”，排序“utf8mb4_general_ci”，如果数据库设计时存放的值，如“VouchType1”和“VOUCHTYPE1”，就会出现“ERROR 1062 (23000) at line xx: Duplicate entry...”错误。所以，没有特殊要求时使用字符集“utf8mb4”，排序“utf8mb4_bin”是一个较好的选择。
 
 ## 4 服务器启停
 
-TDSQL 在服务器（虚拟机）重启后会自动启动，官方文档[组件启停操作说明](https://cloud.tencent.com/privatecloud/document/66088861826052096)提供了一些运维操作指导。
+TDSQL 在服务器（虚拟机）重启后会自动启动。
+
+官方文档[组件启停操作说明](https://cloud.tencent.com/privatecloud/document/66088861826052096)提供了一些运维操作指导。
 
 ### 4.1 启停数据库
 
