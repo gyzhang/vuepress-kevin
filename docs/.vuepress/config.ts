@@ -29,7 +29,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // 导航配置
     nav: [
       { text: '首页', link: '/' },
-      { text: '后端', link: '/pages/7aaa7c/' },
+      { text: '后端(1本书)', link: '/pages/7aaa7c/' },
       { text: '指南', link: '/pages/a2f161/', items: [
           { text: '主题初衷与诞生', link: '/pages/52d5c3/' },
           { text: '介绍', link: '/pages/a2f161/' },
