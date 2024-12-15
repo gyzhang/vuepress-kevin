@@ -49,3 +49,4 @@ echo ip: 192.168.137.101
 qemu-system-aarch64 -m 8096 -cpu cortex-a76 -smp 8,cores=4,threads=2,sockets=1 -M virt -bios QEMU_EFI.fd -drive if=none,file=KylinV10SP1WithoutGUI-ARM64.qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -device VGA -device qemu-xhci -device usb-mouse -device usb-kbd -net nic -net tap,ifname=TAP9247
 ```
 
+> 截至 20241215 使用 9.1.91 版本的 QEMU 可以安装 Kylin-Server-V10-SP3-2403-Release-20240426-arm64.iso。
