@@ -188,7 +188,7 @@ USER appuser
 CMD ["java", "-jar", "app.jar", "--spring.config.location=app.yml"]
 ```
 
-优化后的 Dockerfile：
+以上 Dockerfile 的特点：
 
 1. 减小镜像体积；
 2. 遵循容器日志管理最佳实践；
