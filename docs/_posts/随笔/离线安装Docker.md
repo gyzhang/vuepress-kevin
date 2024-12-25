@@ -160,7 +160,7 @@ docker save eclipse-temurin:8u412-b08-jdk-centos7 -o eclipse-temurin_8u412-b08-j
 
 ## 4 打包镜像
 
-创建 Dockerfile（初始命令经 ChatGPT 指导优化后的结果）：
+创建 Dockerfile 文件：
 
 ```dockerfile
 FROM eclipse-temurin:8u412-b08-jdk-centos7
