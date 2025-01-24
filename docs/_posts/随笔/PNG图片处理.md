@@ -16,20 +16,23 @@ author:
 我需要对一批图片进行处理，以下代码使用“通义”帮我写了几乎全部的代码，我只是补充了处理图片路径的输入参数和一些提示信息。
 
 ```java
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * 对一批PNG图片进行处理：将每张图片中从像素坐标(911,0)到(1009,16)的矩形区域内的每个水平行（y轴上的每一行），用该行最左边的像素（x=911）的颜色值覆盖该行剩余的16个像素。
+ * 对一批PNG图片进行处理：将每张图片中从像素坐标(1230,0)到(1330,16)的矩形区域内的每个水平行（y轴上的每一行），用该行最左边的像素（x=1230）的颜色值覆盖该行从1230到1330的像素。
+ *
  * @author Kevin Zhang With tongyi
  * @since 20250124
  */
 public class PngImageProcessor {
 
     public static void main(String[] args) {
-        String inputDir = "D:\\temp\\replace\\png"; // 替换为你的目录路径
+        String inputDir = "D:\\temp\\replace\\png"; // 默认目录路径
+
         if (args.length > 0) {
             inputDir = args[0];
         } else {
@@ -38,41 +41,61 @@ public class PngImageProcessor {
             return;
         }
 
-        File directory = new File(inputDir);
-        File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".png"));
+        Path dirPath = Paths.get(inputDir);
+        long startTime = System.nanoTime(); // 记录开始时间
 
-        if (files != null) {
-            System.out.println("开始处理【" + files.length + "】个图片文件......");
-            long startTime = System.nanoTime(); // 记录开始时间
-            for (File file : files) {
-                try {
-                    BufferedImage image = ImageIO.read(file);
-
-                    int startX = 911;
-                    int endX = 1009;
-                    int startY = 0;
-                    int endY = 16;
-
-                    for (int y = startY; y <= endY; y++) {
-                        int color = image.getRGB(startX, y); // 获取起始像素颜色
-                        for (int x = startX + 1; x <= endX; x++) {
-                            image.setRGB(x, y, color); // 用起始像素颜色覆盖其他像素
-                        }
+        try {
+            System.out.printf("开始递归处理【%s】目录下的png图片文件...\n", inputDir);
+            final int[] fileCount = {0};
+            Files.walkFileTree(dirPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().toLowerCase().endsWith(".png")) {
+                        processPngFile(file);
+                        fileCount[0]++;
                     }
-
-                    ImageIO.write(image, "png", file);
-
-                } catch (IOException e) {
-                    System.err.println("Error processing file: " + file.getName());
-                    e.printStackTrace();
+                    return FileVisitResult.CONTINUE;
                 }
-            }
-            
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    System.err.println("访问文件失败: " + file);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
             long endTime = System.nanoTime(); // 记录结束时间
             long duration = (endTime - startTime);  // 计算时间差，单位是纳秒
             double seconds = (double) duration / 1_000_000_000.0; // 将纳秒转换为秒，并输出结果
 
-            System.out.println("【" + files.length + "】个图片文件处理完毕，费时：" + seconds + "秒。");
+            System.out.printf("【%d】个图片文件处理完毕，耗时：%.3f秒。\n", fileCount[0], seconds);
+
+        } catch (IOException e) {
+            System.err.println("遍历文件树时出错.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void processPngFile(Path file) {
+        try {
+            BufferedImage image = ImageIO.read(file.toFile());
+
+            int startX = 1230;
+            int endX = 1330;
+            int startY = 0;
+            int endY = 16;
+
+            for (int y = startY; y <= endY; y++) {
+                int color = image.getRGB(startX, y); // 获取起始像素颜色
+                for (int x = startX + 1; x <= endX; x++) {
+                    image.setRGB(x, y, color); // 用起始像素颜色覆盖其他像素
+                }
+            }
+
+            ImageIO.write(image, "png", file.toFile());
+        } catch (IOException e) {
+            System.err.println("处理文件时出错: " + file);
+            e.printStackTrace();
         }
     }
 }
@@ -82,8 +105,8 @@ public class PngImageProcessor {
 
 ```bash
 java PngImageProcessor D:\temp\replace\png
-开始处理【15】个图片文件......
-【15】个图片文件处理完毕，费时：6.7953329秒。
+开始递归处理【D:\temp\replace\png】目录下的png图片文件...
+【150】个图片文件处理完毕，耗时：292.933秒。
 ```
 
 现在的 AI 已经可以在工作中为我提供很多助力。
