@@ -6,7 +6,9 @@ sidebar: auto
 categories:
   - 随笔
 tags:
-  - 
+  - 图片处理
+  - C++
+  - GUI
 author: 
   name: Kevin Zhang
   link: https://github.com/gyzhang
@@ -63,7 +65,7 @@ endif()
 
 main.cpp 文件内容如下：
 
-```c++
+```cpp
 #include <iostream>
 #include <filesystem>
 #include <png.h>
@@ -75,9 +77,9 @@ main.cpp 文件内容如下：
 namespace fs = std::filesystem;
 
 // 处理单个 PNG 文件
-void processPngFile(const fs::path& filePath, int startX, int endX, int startY, int endY) {
+void processPngFile(const fs::path &filePath, int startX, int endX, int startY, int endY) {
     // 打开文件以读取，使用 _wfopen 处理宽字符路径
-    FILE* fp = _wfopen(filePath.c_str(), L"rb");
+    FILE *fp = _wfopen(filePath.c_str(), L"rb");
     if (!fp) {
         std::wcerr << L"无法打开文件: " << filePath.c_str() << std::endl;
         return;
@@ -147,7 +149,7 @@ void processPngFile(const fs::path& filePath, int startX, int endX, int startY, 
     png_read_update_info(png_ptr, info_ptr);
 
     // 分配内存
-    png_bytep* row_pointers = new png_bytep[height];
+    png_bytep *row_pointers = new png_bytep[height];
     for (int y = 0; y < height; ++y) {
         row_pointers[y] = new png_byte[png_get_rowbytes(png_ptr, info_ptr)];
     }
@@ -171,9 +173,9 @@ void processPngFile(const fs::path& filePath, int startX, int endX, int startY, 
 
     int bytes_per_pixel = png_get_channels(png_ptr, info_ptr);
     for (int y = startY; y <= endY; ++y) {
-        png_byte* left_pixel = &row_pointers[y][startX * bytes_per_pixel];
+        png_byte *left_pixel = &row_pointers[y][startX * bytes_per_pixel];
         for (int x = startX + 1; x <= endX; ++x) {
-            png_byte* current_pixel = &row_pointers[y][x * bytes_per_pixel];
+            png_byte *current_pixel = &row_pointers[y][x * bytes_per_pixel];
             for (int i = 0; i < bytes_per_pixel; ++i) {
                 current_pixel[i] = left_pixel[i];
             }
@@ -233,8 +235,7 @@ void processPngFile(const fs::path& filePath, int startX, int endX, int startY, 
     png_init_io(write_png_ptr, fp);
 
     // 设置写入信息
-    png_set_IHDR(write_png_ptr, write_info_ptr, width, height, 8, PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
-                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_set_IHDR(write_png_ptr, write_info_ptr, width, height, 8, PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
     // 写入信息
     png_write_info(write_png_ptr, write_info_ptr);
@@ -256,8 +257,8 @@ void processPngFile(const fs::path& filePath, int startX, int endX, int startY, 
 }
 
 // 递归处理目录下的 PNG 文件
-void processDirectory(const fs::path& dirPath, int startX, int endX, int startY, int endY, int& fileCount) {
-    for (const auto& entry : fs::recursive_directory_iterator(dirPath)) {
+void processDirectory(const fs::path &dirPath, int startX, int endX, int startY, int endY, int &fileCount) {
+    for (const auto &entry: fs::recursive_directory_iterator(dirPath)) {
         if (entry.is_regular_file() && entry.path().extension() == ".png") {
             processPngFile(entry.path(), startX, endX, startY, endY);
             ++fileCount;
@@ -267,7 +268,8 @@ void processDirectory(const fs::path& dirPath, int startX, int endX, int startY,
 
 // 窗口过程函数
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    static HWND hFolderPathLabel, hFolderPathEdit, hX1Label, hX1Edit, hY1Label, hY1Edit, hX2Label, hX2Edit, hY2Label, hY2Edit, hButton;
+    static HWND hFolderPathLabel, hFolderPathEdit, hX1Label, hX1Edit, hY1Label, hY1Edit, hX2Label, hX2Edit, hY2Label,
+            hY2Edit, hButton;
     switch (msg) {
         case WM_CREATE: {
             // 创建文件夹路径说明标签
@@ -313,7 +315,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
         }
         case WM_COMMAND: {
-            if (LOWORD(wParam) == 6) { // 按钮点击事件
+            if (LOWORD(wParam) == 6) {
+                // 按钮点击事件
                 wchar_t folderPath[256];
                 wchar_t x1Str[10], y1Str[10], x2Str[10], y2Str[10];
                 GetWindowTextW(hFolderPathEdit, folderPath, 256);
@@ -335,7 +338,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 processDirectory(inputDir, startX, endX, startY, endY, fileCount);
 
                 auto endTime = std::chrono::high_resolution_clock::now(); // 记录结束时间
-                auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count(); // 计算时间差，单位是纳秒
+                auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+                // 计算时间差，单位是纳秒
                 double seconds = static_cast<double>(duration) / 1e9; // 将纳秒转换为秒
 
                 wchar_t message[256];
@@ -375,8 +379,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     int windowY = (screenHeight - windowHeight) / 2;
 
     // 创建窗口，去掉 WS_MAXIMIZEBOX 和 WS_THICKFRAME 标志，禁止最大化和调整大小
-    HWND hwnd = CreateWindowW(L"ErasePNGWindowClass", L"PNG抹掉一部分[左上（x1,y1）,右下(x2,y2)]图片内容", WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_THICKFRAME),
-                              windowX, windowY, windowWidth, windowHeight, NULL, NULL, hInstance, NULL);
+    HWND hwnd = CreateWindowW(L"ErasePNGWindowClass", L"PNG抹掉一部分[左上（x1,y1）,右下(x2,y2)]图片内容", WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_THICKFRAME), windowX, windowY, windowWidth, windowHeight, NULL, NULL, hInstance, NULL);
 
     // 显示窗口
     ShowWindow(hwnd, iCmdShow);
