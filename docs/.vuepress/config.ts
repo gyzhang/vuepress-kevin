@@ -66,7 +66,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '芋道', link: '/pages/604be0/', items: [
           { text: '快速开始', link: '/pages/604be0/' },
           { text: '代码集成_TODO', link: '/pages/15cb1b/' },
-          { text: '框架初探_TODO', link: '/pages/abf949/' },
+          { text: '框架初探', link: '/pages/abf949/' },
         ]
       },
       {
