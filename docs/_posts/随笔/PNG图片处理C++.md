@@ -13,11 +13,109 @@ author:
   name: Kevin Zhang
   link: https://github.com/gyzhang
 ---
-# PNG图片处理，使用C++代码
+# PNG图片处理，借助AI使用C++代码
 
-我需要对一批图片进行处理，使用 JAVA 写完代码后，想进一步写成 Windows 下的极小的 GUI 应用，可以在 GUI 界面上设置涂抹掉 PNG 文件的区域和递归处理的文件夹路径。使用 CLion 开发环境，豆包帮我做了代码转化，并持续提示添加了 GUI 界面的代码，效率数十倍的提高。
+在工作中，我需要对一批图片进行处理，使用 JAVA 写完代码后，想进一步写成 Windows 下的极小的 GUI 应用，可以在 GUI 界面上设置涂抹掉 PNG 文件的区域和递归处理的文件夹路径。
 
-两个文件如下：
+本次实践使用了 CLion 开发环境，“豆包”帮我做了代码转化，并在持续的对话提示中帮我添加了 GUI 界面的代码，包括 GUI 上的布局都是 AI 帮我计算调整的，效率数十倍的提高。
+
+为什么要先写 JAVA  版本的代码呢？因为我长年使用 JAVA，工作用语言就是它，突出一个字儿“熟”。
+
+熟归熟，日常也不经常在这么底层操作文建，所以就请“通义”帮我写了 JAVA 出版代码，然后我自己调整的。经过大约半小时，一个可用的 JAVA 代码就写完了，如下：
+
+```java
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+
+/**
+ * 对一批PNG图片进行处理：将每张图片中从像素坐标(1230,0)到(1330,16)的矩形区域内的每个水平行（y轴上的每一行），用该行最左边的像素（x=1230）的颜色值覆盖该行从1230到1330的像素。
+ *
+ * @author Kevin Zhang With tongyi
+ * @since 20250124
+ */
+public class PngImageProcessor {
+
+    public static void main(String[] args) {
+        String inputDir = "D:\\temp\\replace\\png"; // 默认目录路径
+
+        if (args.length > 0) {
+            inputDir = args[0];
+        } else {
+            System.out.println("请指定需要处理图片存放的目录。");
+            System.out.println("Usage: java PngImageProcessor D:\\temp\\replace\\png");
+            return;
+        }
+
+        Path dirPath = Paths.get(inputDir);
+        long startTime = System.nanoTime(); // 记录开始时间
+
+        try {
+            System.out.printf("开始递归处理【%s】目录下的png图片文件...\n", inputDir);
+            final int[] fileCount = {0};
+            Files.walkFileTree(dirPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().toLowerCase().endsWith(".png")) {
+                        processPngFile(file);
+                        fileCount[0]++;
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    System.err.println("访问文件失败: " + file);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
+            long endTime = System.nanoTime(); // 记录结束时间
+            long duration = (endTime - startTime);  // 计算时间差，单位是纳秒
+            double seconds = (double) duration / 1_000_000_000.0; // 将纳秒转换为秒，并输出结果
+
+            System.out.printf("【%d】个图片文件处理完毕，耗时：%.3f秒。\n", fileCount[0], seconds);
+
+        } catch (IOException e) {
+            System.err.println("遍历文件树时出错.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void processPngFile(Path file) {
+        try {
+            BufferedImage image = ImageIO.read(file.toFile());
+
+            int startX = 1230;
+            int endX = 1330;
+            int startY = 0;
+            int endY = 16;
+
+            for (int y = startY; y <= endY; y++) {
+                int color = image.getRGB(startX, y); // 获取起始像素颜色
+                for (int x = startX + 1; x <= endX; x++) {
+                    image.setRGB(x, y, color); // 用起始像素颜色覆盖其他像素
+                }
+            }
+
+            ImageIO.write(image, "png", file.toFile());
+        } catch (IOException e) {
+            System.err.println("处理文件时出错: " + file);
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+在上面可用 JAVA 代码的基础上，选择 CLion 作为开发环境，本机在安装 git 的时候安装了 msys64（下载 C++ 处理库）。
+
+我也没有用过 CLion 开发环境啊，如何用？如何配置？也是问 AI 的，基本上能做到“半小时入门”。
+
+在与“豆包”聊天的过程中，了解如何使用 msys64 下载依赖的库，如何在 CLion 中引入这些库，然后就可以在验证可以正确使用外部库的情况下，进一步将 JAVA 代码转换成 C++ 代码，最终编译出 Windows 本地的 exe 可执行文件（release版）。
+
+整个 JAVA 转化 C++ 的过程，花了大约 2小时，最终得到的两个源文件如下：
 
 CMakeLists.txt 文件中引入需要的 png 和 zip 处理库：
 
@@ -269,7 +367,7 @@ void processDirectory(const fs::path &dirPath, int startX, int endX, int startY,
 // 窗口过程函数
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     static HWND hFolderPathLabel, hFolderPathEdit, hX1Label, hX1Edit, hY1Label, hY1Edit, hX2Label, hX2Edit, hY2Label,
-            hY2Edit, hButton;
+            hY2Edit, hButton, hByKevinLabel;
     switch (msg) {
         case WM_CREATE: {
             // 创建文件夹路径说明标签
@@ -311,7 +409,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             // 计算按钮的 x 坐标，使其居中
             int buttonX = (windowWidth - buttonWidth) / 2;
             // 创建按钮
-            hButton = CreateWindowW(L"BUTTON", L"处理[2秒/图片]", WS_VISIBLE | WS_CHILD, buttonX, 140, buttonWidth, 30, hwnd, (HMENU)6, NULL, NULL);
+            hButton = CreateWindowW(L"BUTTON", L"递归处理[2秒/图片]", WS_VISIBLE | WS_CHILD, buttonX, 140, buttonWidth, 30, hwnd, (HMENU)6, NULL, NULL);
+
+            // 添加 "by Kevin" 文本
+            int textWidth = 205;  // 文本宽度
+            int textHeight = 20;  // 文本高度
+            int textX = windowRect.right - textWidth - 10;  // 右下角 x 坐标
+            int textY = windowRect.bottom - textHeight - 10;  // 右下角 y 坐标
+            hByKevinLabel = CreateWindowW(L"STATIC", L"by Kevin@ChengDu#20250211", WS_VISIBLE | WS_CHILD, textX, textY, textWidth, textHeight, hwnd, NULL, NULL, NULL);
+
             break;
         }
         case WM_COMMAND: {
@@ -372,7 +478,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
     // 定义窗口大小
     int windowWidth = 450;
-    int windowHeight = 220;
+    int windowHeight = 250;
 
     // 计算窗口左上角坐标，使其位于屏幕中央
     int windowX = (screenWidth - windowWidth) / 2;
@@ -398,7 +504,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 测试处理程序运行情况：
 
-![image-20250207203529227](./images/image-20250207203529227.png)
+![image-20250222221556333](./images/image-20250222221556333.png)
 
 
-Kevin@Chengdu#20250207
+Kevin@Chengdu#20250222
